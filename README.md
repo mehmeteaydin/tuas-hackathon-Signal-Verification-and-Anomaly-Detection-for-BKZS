@@ -29,7 +29,7 @@ Türkiye'nin kritik navigasyon altyapısını GPS spoofing ve jamming saldırıl
 - ✅ **RESTful API:** FastAPI ile entegre edilebilir endpoint'ler
 - ✅ **Modern Web UI:** Gerçek zamanlı dashboard ve görselleştirme
 - ✅ **Açık Kaynak:** Şeffaf metodoloji ve topluluk katkısına açık
-- ✅ **Feature Engineering:** 48 özellikten akıllıca seçilmiş 25 kritik özellik
+- ✅ **Feature Engineering:** 48 özellikten akıllıca seçilmiş 24 kritik özellik
 - ✅ **Ensemble Learning:** XGBoost + Isolation Forest hibrit yaklaşım
 
 ---
@@ -48,7 +48,7 @@ Türkiye'nin kritik navigasyon altyapısını GPS spoofing ve jamming saldırıl
          │
          ▼
 ┌─────────────────┐
-│ Feature Eng.    │  (48 → 25 Features)
+│ Feature Eng.    │  (48 → 24 Features)
 └────────┬────────┘
          │
          ▼
@@ -76,21 +76,25 @@ bkzs/
 │
 ├── backend/app/
 │   ├── __init__.py             
-│   ├── main.py                 # FastAPI application
-│   ├── ml_engine.py            # Trained Model Engine
-│   ├── schemas.py              # Signal model
+│   ├── main.py                   # FastAPI application
+│   ├── ml_engine.py              # Trained Model Engine
+│   ├── schemas.py                # Signal model
 │   ├── models_bin/
-│   │   ├── xgboost_model.pkl   # Trained model
-│   │   ├── scaler.pkl          # Feature scaler
+|   |   ├── isolationforest/
+|   |   |   ├── i_forest_model.py # Feature Engineering
+│   │   ├── xgboost_model.pkl     # Trained model
+│   │   ├── scaler.pkl            # Feature scaler
 │   │   └── feature_selector.pkl
 │   ├── templates/
 |   |   ├── index.html      
-|   |   ├── test.html
+|   |   └── test.html
 |   |
 │   ├── static/
-|   |   ├── test.js
-|   |   ├── utils.css
-|   |   ├── styles.css
+|   |   ├── css/
+|   |   |   ├── style.css
+|   |   |   └── utils.css
+|   |   └── js/
+|   |   |   └── test.js
 ├── frontend/
 │   ├── index.html              # Main dashboard
 │   ├── styles.css
@@ -129,58 +133,11 @@ bkzs/
 ### POST `/predict`
 Tek sinyal örneği için tahmin yapar.
 
-**Request:**
-```json
-{
-  "latency": 45.2,
-  "throughput": 78.5,
-  "signal_strength": -85.0,
-  "packet_loss": 2.3,
-  "jitter": 12.1,
-  "snr": 15.2,
-  "error_rate": 0.05,
-  "authentication_time": 120.0,
-  "encryption_overhead": 8.5
-}
-```
-
-**Response:**
-```json
-{
-  "prediction": "anomaly",
-  "confidence": 0.87,
-  "anomaly_score": -0.65,
-  "risk_level": "high",
-  "timestamp": "2025-03-29T10:30:45Z"
-}
-```
-
 ### POST `/inject/{attack_type}`
-Çoklu sinyal örneği için toplu tahmin.
-
-**Request:**
-```json
-{
-  "samples": [
-    { "latency": 45.2, "throughput": 78.5, ... },
-    { "latency": 32.1, "throughput": 92.3, ... }
-  ]
-}
-```
+Simülasyona saldıracak atak tipini seçer.
 
 ### GET `/stream`
 Sistemin sinyal veri akışı durumu.
-
-**Response:**
-```json
-{
-  "status": "healthy",
-  "uptime": "5 days, 3:24:15",
-  "model_version": "1.0.0",
-  "memory_usage_mb": 198.5,
-  "request_count": 15234
-}
-```
 
 ## 🧪 Veri Seti
 
