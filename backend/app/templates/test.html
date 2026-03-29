@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BKZS Anomali Tespit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/utils.css') }}">
+  <style>
+    /* Dinamik Saldırı Çerçevesi Stilleri */
+    .attack-info-frame {
+      display: none;
+      background: #1e293b;
+      border-left: 4px solid #3b82f6;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .attack-info-frame h4 {
+      margin-top: 0;
+      color: #60a5fa;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .attack-info-frame p {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .attack-info-frame strong {
+      color: #fbbf24;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>BKZS İçin Sinyal Doğrulama ve Anomali Tespiti</h1>
+      <p>
+        Bu sistem 4 temel siber saldırıyı hedefler: <strong>DoS, Spoofing, Sybil ve Data Tampering.</strong>
+        Model; fiziksel tutarsızlıkları, ağ yığılmalarını, RF uyuşmazlıklarını ve kimlik güvenini eş zamanlı izler.
+      </p>
+    </header>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>Canlı Trafik Simülasyonu & Sınıflandırma</h2>
+        <div class="controls">
+          <button type="button" class="primary" id="btnToggle">Akışı başlat</button>
+        </div>
+
+        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;margin-top:1rem;">
+          <strong>Saldırı Simülasyonu:</strong> Aşağıdaki butonlara tıklayarak ağa spesifik bir saldırı enjekte
+          edebilirsiniz.
+        </p>
+        <div class="inject-grid" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+          <button type="button" class="secondary btn-normal" data-inject="Normal" style="flex: 1;">✅ Normal</button>
+          <button type="button" class="secondary btn-dos" data-inject="dos" style="flex: 1;">🌊 DoS Attack</button>
+          <button type="button" class="secondary btn-spoof" data-inject="spoofing" style="flex: 1;">🎭 Spoofing</button>
+          <button type="button" class="secondary btn-sybil" data-inject="sybil" style="flex: 1;">👯 Sybil
+            Attack</button>
+          <button type="button" class="secondary btn-tamper" data-inject="tampering" style="flex: 1;">🛠️ Data
+            Tampering</button>
+        </div>
+
+        <div class="attack-info-frame" id="attackInfoFrame">
+          <h4 id="infoTitle">Saldırı Detayı</h4>
+          <p id="infoDesc">Detaylar...</p>
+
+          <div id="activeMetricsContainer"
+            style="display: flex; gap: 1rem; flex-wrap: wrap; padding-top: 0.5rem; border-top: 1px dashed #334155;">
+          </div>
+        </div>
+
+        <div class="viz-stack">
+          <div class="chart-box" style="height: 300px; margin-bottom: 1rem;">
+            <canvas id="chartSignals"></canvas>
+          </div>
+
+          <div class="decision attack-false below-chart" id="decisionBox">
+            <div class="decision-top" style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="attack-type normal" id="attackLabel" style="font-size: 1.2rem; font-weight: bold;">NORMAL
+                </div>
+                <p class="reason" id="attackReason" style="font-size: 0.85rem; color: var(--muted);">Veri akışı
+                  bekleniyor...</p>
+              </div>
+              <span class="flag off" id="attackFlag"
+                style="padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; background: #2a3544;">attack =
+                false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metrics-drawer-body" id="metricsDrawerBody"
+          style="margin-top: 2rem; border-top: 1px solid #2a3544; padding-top: 1rem;">
+          <p class="full-metrics-note" style="margin-bottom: 1rem; color: #8cb4ff; font-size: 0.9rem;">
+            📊 <strong>Tüm Canlı GNSS & Network Parametreleri (20 Adet)</strong>
+          </p>
+
+          <h3 class="metric-group-title" style="color: #ffb020; margin-bottom: 0.5rem;">🚗 Araç Dinamiği & Konum</h3>
+          <div class="metrics"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="metric"><label>Hız (km/h)</label><span class="value" id="mSpeed">—</span></div>
+            <div class="metric"><label>İvme (m/s²)</label><span class="value" id="mAccel">—</span></div>
+            <div class="metric"><label>Enlem (Lat)</label><span class="value" id="mLat">—</span></div>
+            <div class="metric"><label>Boylam (Long)</label><span class="value" id="mLong">—</span></div>
+          </div>
+
+          <h3 class="metric-group-title" style="color: #00d4aa; margin-bottom: 0.5rem;">🌐 Ağ Trafik Analizi</h3>
+          <div class="metrics"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="metric"><label>Gecikme (ms)</label><span class="value" id="mLatency">—</span></div>
+            <div class="metric"><label>Jitter (ms)</label><span class="value" id="mJitter">—</span></div>
+            <div class="metric"><label>Paket Kaybı (%)</label><span class="value" id="mPacketLoss">—</span></div>
+            <div class="metric"><label>İletim Hızı (Mbps)</label><span class="value" id="mTxRate">—</span></div>
+            <div class="metric"><label>Akış Süresi (ms)</label><span class="value" id="mFlowDur">—</span></div>
+            <div class="metric"><label>Bps (Flow Bytes)</label><span class="value" id="mFlowBps">—</span></div>
+            <div class="metric"><label>Avg Packet Len</label><span class="value" id="mAvgPktLen">—</span></div>
+            <div class="metric"><label>Fwd Packets</label><span class="value" id="mFwdPkts">—</span></div>
+            <div class="metric"><label>Bwd Packets</label><span class="value" id="mBwdPkts">—</span></div>
+          </div>
+
+          <h3 class="metric-group-title" style="color: #c9a227; margin-bottom: 0.5rem;">📡 Sinyal & Bayraklar</h3>
+          <div class="metrics"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="metric"><label>Sinyal Gücü (dBm)</label><span class="value" id="mSignal">—</span></div>
+            <div class="metric"><label>SYN Flag Count</label><span class="value" id="mSyn">—</span></div>
+            <div class="metric"><label>ACK Flag Count</label><span class="value" id="mAck">—</span></div>
+            <div class="metric"><label>Paket Boyutu (B)</label><span class="value" id="mPktSize">—</span></div>
+          </div>
+
+          <h3 class="metric-group-title" style="color: #fd79a8; margin-bottom: 0.5rem;">🛡️ Güvenlik & Doğrulama</h3>
+          <div class="metrics"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="metric"><label>Güven Skoru (0-1)</label><span class="value" id="mTrustScore">—</span></div>
+            <div class="metric"><label>Şifreleme Ek Yükü</label><span class="value" id="mEncOverhead">—</span></div>
+            <div class="metric"><label>Kimlik Doğrulama</label><span class="value" id="mAuth">—</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', path='/js/test.js') }}"></script>
+</body>
+
+</html>
