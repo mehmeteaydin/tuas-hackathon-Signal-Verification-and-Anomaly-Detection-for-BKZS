@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BKZS Anomali Tespit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/utils.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="badge-container">
+        <span class="badge glow-badge">🚀 ASTRO HACKATHON | 2026 KAYSERİ</span>
+      </div>
+      <h1 class="main-title">
+        BKZS Sinyal Doğrulama ve<br>
+        <span class="text-gradient">Anomali Tespit Sistemi</span>
+      </h1>
+      <p class="subtitle">
+        Bölgesel Konumlama ve Zamanlama Sistemleri (BKZS) altyapısını <strong>sinyal karıştırma (jamming) ve yanıltma
+          (spoofing)</strong> saldırılarına karşı korumak amacıyla tasarlanmış; <strong>açık kaynaklı ve yapay zeka
+          destekli</strong> anomali tespit yazılımı prototipi.
+      </p>
+
+      <a href="/test" class="cta-button">Canlı Simülasyonu Başlat</a>
+
+      <div class="tech-stack">
+        <span>RF Sinyal Analizi</span>
+        <span>Açık Kaynak Mimari</span>
+        <span>Kriptografik Doğrulama</span>
+        <span>Kinematik Tutarlılık</span>
+      </div>
+    </header>
+
+    <div class="about-section">
+      <h2>Anomali Tespiti ve Sınıflandırılması</h2>
+      <p>
+        Bu proje, Bölgesel Konumlama ve Zamanlama Sistemleri (BKZS) altyapısının güvenilirliğini sağlamak ve konum/zaman
+        verilerini manipüle etmeyi amaçlayan tehditleri bertaraf etmek için tasarlanmıştır. Sistem, gücünü
+        <strong>Isolation Forest ve XGBoost</strong> algoritmalarından oluşan iki aşamalı, hibrit bir makine öğrenmesi
+        modelinden alır.
+      </p>
+      <p style="margin-top: 1rem;">
+        Bu sistem 4 temel siber saldırıyı tam isabetle hedefler: <strong>DoS, Spoofing, Sybil ve Data
+          Tampering.</strong> Karar motoru modelimiz; sinyallerdeki fiziksel tutarsızlıkları, ağ yığılmalarını, RF
+        uyuşmazlıklarını ve kimlik güvenini eş zamanlı olarak izleyerek BKZS'yi çok boyutlu bir koruma kalkanı altına
+        alır.
+      </p>
+    </div>
+
+    <div class="grid">
+      <div class="card spoofing">
+        <div class="card-icon">SPOOFING</div>
+        <h3>Sinyal Yanıltma</h3>
+        <p>Ağa sahte konum, hız veya ivme verileri enjekte ederek fizik kurallarına aykırı sıçramalar yaratma girişimi.
+          Sistem, GPS ve hız uyuşmazlığını anında algılar.</p>
+      </div>
+
+
+      <div class="card dos">
+        <div class="card-icon">DENIAL OF SERVICE</div>
+        <h3>Hizmet Aksatma</h3>
+        <p>Ağ kaynaklarını devasa trafikle tüketerek meşru araçların erişimini engelleme. Aşırı yüksek gecikme
+          (Latency), Jitter ve mantıksız SYN seli üzerinden yakalanır.</p>
+      </div>
+
+
+      <div class="card sybil">
+        <div class="card-icon">SYBIL ATTACK</div>
+        <h3>Sahte Kimlik (Düğüm)</h3>
+        <p>Tek bir saldırganın ağda trafik sıkışıklığı yanılsaması yaratmak için yüzlerce sahte araç kimliği
+          oluşturması. Aynı koordinatlardan gelen farklı ID çakışmaları incelenir.</p>
+      </div>
+
+      <div class="card tampering">
+        <div class="card-icon">DATA TAMPERING</div>
+        <h3>Veri Tahrifatı</h3>
+        <p>Paketlerin araya girilerek (MitM) değiştirilmesi. Şifreleme işlemlerinin uzaması (Encryption overhead) ve
+          bozulan kimlik doğrulama süreçleri üzerinden ifşa edilir.</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>GNSS Spoofing & Anomaly Detection — Hazırlanan model, 1,500 kayıttan oluşan 5G VANET IoT Ultra-Low Latency
+        Security veri setine dayanmaktadır.</p>
+    </footer>
+  </div>
+</body>
+
+</html>
